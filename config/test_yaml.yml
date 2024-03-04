@@ -1,0 +1,10 @@
+ 
+ telegram:
+  api_id: 25189624
+  api_hash: '04543d398a851335febcf43cca61fd81'
+  bot_token: '6285135502:AAG_VYIgMc7ekgtRbFAZmZox6xaOp2Pse-w'
+  raphael_chat_id: 1288406279
+  carol_chat_id: 947783848
+
+pandas:
+  caminho_arquivo: 'C:\Users\rapha\Desktop\medicamentos_drive.xlsx'
