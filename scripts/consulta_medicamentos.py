@@ -5,6 +5,8 @@ from os import getenv
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 
+import __init__
+
 # Configura o idioma para português
 locale.setlocale(locale.LC_TIME, 'pt_BR')
 

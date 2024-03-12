@@ -1,8 +1,10 @@
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-# Habilita o logging para retorno de mensagens de erro e informações no terminal
-from utils.config import configurar_logger
-logger = configurar_logger()
+# Habita as configurações inicias para todo projeto
+import config as cg
+
+logger = cg.configurar_logger()
+cg.limpar_terminal(False)
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 

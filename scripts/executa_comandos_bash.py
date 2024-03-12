@@ -1,5 +1,12 @@
-# O módulo subprocess permite que os comandos sejam executados em segundo plano
-import subprocess
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+# Habita as configurações inicias para todo projeto
+import config as cg
+
+logger = cg.configurar_logger()
+cg.limpar_terminal(False)
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 # Lista de comandos a serem executados
 comandos = [
@@ -8,10 +15,4 @@ comandos = [
     'git status'
 ]
 
-# Itera sobre a lista de comandos e executa cada um deles
-for comando in comandos:
-    """
-    A função subprocess.run() permite executar comandos no sistema
-    operacional a partir de um script Python.
-    """
-    subprocess.run(comando, shell=True)  # shell=True torna o comando executável
+cg.executar_comandos_bash(comandos)
