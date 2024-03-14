@@ -7,6 +7,12 @@
 - Após tudo preparado, deve copiar os arquivos que correspondem a string desejada para uma pasta de destino
 '''
 
+# Próximos passos #
+
+'''
+
+'''
+
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 # Corrige o diretório de trabalho para chamar a importações da pasta .utils
