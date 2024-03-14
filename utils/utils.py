@@ -27,6 +27,9 @@ from datetime import datetime
 # Permite funcionalidades para o interpretador
 import sys
 
+# 
+import shutil
+
 # Possibilita a anotação de tipos indicando que uma variável, argumento ou valor de retorno deve ser uma lista.
 from typing import List, Any
 
@@ -85,8 +88,11 @@ def red(texto: str = '') -> str:
 
 def magenta(texto: str = '') -> str:
     '''Formata o texto magenta no terminal.'''
-    return str(Fore.MAGENTA + str(texto) + Style.RESET_ALL)                                    
- 
+    return str(Fore.MAGENTA + str(texto) + Style.RESET_ALL)    
+
+def yellow(texto: str = '') -> str:
+    '''Formata o texto magenta no terminal.'''
+    return str(Fore.YELLOW + str(texto) + Style.RESET_ALL)                            
  
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -103,10 +109,20 @@ def logger_manual(level_name: str = None) -> str:
         level_name = 'info'.upper()
     else:
         level_name.upper()
-    return print(f'{define_data_hora_formatada()} - {gree('INFO')} - Nível de logger configurado como {format_logging(level_name)}.')
+    return print(f'{define_data_hora_formatada()} - {green('INFO')} - Nível de logger configurado como {format_logging(level_name)}.')
 
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+# Define um novo nível de log personalizado
+logging.addLevelName(25, 'ALERT')
+
+# Define o método para chamar o novo nível
+def alert(self, message, *args, **kws):
+    self._log(25, message, args, **kws) 
+    
+# Vincula o novo nível de log ao objeto logging
+logging.Logger.alert = alert
 
 # Mapeia os níveis de log para cores correspondentes 
 def format_logging(levelname: str):
@@ -114,10 +130,12 @@ def format_logging(levelname: str):
         'DEBUG': Fore.CYAN,
         'INFO': Fore.GREEN,
         'WARNING': Fore.YELLOW,
+        'ALERT': Fore.YELLOW,
         'ERROR': Fore.RED,
-        'CRITICAL': Fore.MAGENTA
+        'CRITICAL': Fore.MAGENTA,
+        'CUSTOM': Fore.MAGENTA
     }
-    return f'{colors.get(levelname, "")}{levelname}{Style.RESET_ALL}'
+    return f'{colors.get(levelname, '')}{levelname}{Style.RESET_ALL}'
 
 # Configura o logger para retorno de mensagens de erro e informações no terminal
 def configurar_logger(atributo_nome: str = __name__, level_name: str = 'info') -> logging.Logger:

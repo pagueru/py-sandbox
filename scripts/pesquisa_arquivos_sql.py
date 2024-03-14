@@ -16,17 +16,21 @@ cg.configurar_path()
 # Importa as funcionalidades padrões do projeto
 from utils.utils import *
 
-# Configura o logger e limpa o terminal
-#logger = logging.getLogger(__name__)
+# Limpa o terminal
 limpar_terminal(True)
-logger = configurar_logger(__name__, 'debug')
+
+# Define se deve mostrar o log de execução das funções
+logger_execucao_funcao = 'info'
+
+# Configura o logger
+#logger = logging.getLogger(__name__)
+logger = configurar_logger(__name__, logger_execucao_funcao)
+
+# Define a mensagem de nivel de logger
 logger_manual(logging.getLevelName(logger.level))
 
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
-
-#### --> Adicionar comentárioss por bibliteca
-import shutil
-from pathlib import Path
+# Configura o arquivo de log
+configurar_arquivo_log
 
 # Obtém o nome do script
 nome_script = Path(__file__).name
@@ -40,18 +44,14 @@ diretorio_pasta_script = Path(__file__).parent.parent
 # Mensagem de inicialização
 logger.info(f'Iniciando o script {cyan(nome_script)} no diretório {green(diretorio_completo_script_arquivo)}.')
 
-# Define se deve mostrar o log de execução das funções
-logger_execucao_funcao = 'info'
-
-@erro_execucao(logger_execucao_funcao)
-def printar():
-    print('teste')
-
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 # Normaliza o diretório
 @erro_execucao(logger_execucao_funcao)
 def trata_diretorio(caminho: str) -> Path:
+    
     try:
         return Path(os.path.normpath(caminho))
     except Exception as e:
@@ -63,6 +63,7 @@ def trata_diretorio(caminho: str) -> Path:
 # Verifica se uma pasta existe e, se não, criá-la
 @erro_execucao(logger_execucao_funcao)
 def definir_diretorio_saida(diretorio: Path = Path.home() / 'Desktop' / 'teste') -> Path:
+    
     try:
         Path(diretorio)
     except Exception as e:
@@ -74,9 +75,7 @@ def definir_diretorio_saida(diretorio: Path = Path.home() / 'Desktop' / 'teste')
 # Verifica se uma string está presente em um arquivo
 @erro_execucao(logger_execucao_funcao)
 def busca_string_em_arquivo(caminho_arquivo: Path, texto_procurado: str) -> bool:
-    
-    trata_diretorio(caminho_arquivo)
-    
+        
     encodings = ['utf-8', 'latin-1']  # Tentar com UTF-8 e Latin-1
     for encoding in encodings:
         try:
@@ -94,7 +93,7 @@ def busca_string_em_arquivo(caminho_arquivo: Path, texto_procurado: str) -> bool
 # Função para percorrer todos os arquivos em uma pasta com uma extensão específica   
 @erro_execucao(logger_execucao_funcao)
 def percorrer_arquivos_em_pasta(diretorio_raiz: Path, string_pesquisa: str, extensao: str) -> list:
-
+    
     if isinstance(diretorio_raiz, list):
         logger.info(f'Iniciando a busca de arquivos com a extensão {cyan(extensao)} na {cyan('lista de diretórios inserida')}.') 
     else:
@@ -116,7 +115,7 @@ def percorrer_arquivos_em_pasta(diretorio_raiz: Path, string_pesquisa: str, exte
                 elif len(lista_de_arquivos) > 1:
                     logger.info(f'Foram encontrados {magenta(len(lista_de_arquivos))} arquivos com a extensão {cyan(extensao)} na pasta {green(diretorio)}.')
             else:
-                logger.error(f'O diretório não é válido: {red(diretorio)}')
+                logger.alert(f'O diretório não é válido: {yellow(diretorio)}')
         
         try:
             for arquivo in lista_de_arquivos:
@@ -133,6 +132,7 @@ def percorrer_arquivos_em_pasta(diretorio_raiz: Path, string_pesquisa: str, exte
 # Função para mover arquivos para o diretório de saída
 @erro_execucao(logger_execucao_funcao)
 def copiar_arquivos_para_saida(lista_de_arquivos: List[Path], diretorio_saida: Path, sobrescrever: bool = True, mostrar_arquivos: bool = True) -> None:
+    
     arquivos_ignorados = 0
     arquivos_copiados = 0
     
@@ -162,6 +162,7 @@ def copiar_arquivos_para_saida(lista_de_arquivos: List[Path], diretorio_saida: P
 # Função para ler diretórios de um arquivo Excel
 @erro_execucao(logger_execucao_funcao)
 def ler_diretorios_de_excel(caminho_arquivo_excel: str, nome_coluna: str = 'Caminho') -> list:
+    
     try:
         # Caixa alta da coluna
         nome_coluna = nome_coluna.upper()
@@ -211,15 +212,7 @@ def main() -> None:
         sobrescrever = False,
         mostrar_arquivos = True
     )
-    finaliza_script()
-    
-    # Define o diretório de saída dos arquivos .sql encontrados
-    try:
-        definir_diretorio_saida()
-    except TypeError:
-        logger.error(f'Para utilizar a função {definir_diretorio_saida.__name__} é necessário informar um diretório válido como argumento.')
-        finaliza_script_com_erro()
-          
+                  
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -230,7 +223,6 @@ if __name__ == '__main__':
         main()
     except Exception as e:
         logger.error(f'Erro durante a execução do script: {e}')
-    
     
     # Restaure a saída padrão e a saída de erro padrão
     #sys.stdout.close()
