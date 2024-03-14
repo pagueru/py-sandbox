@@ -113,7 +113,7 @@ def percorrer_arquivos_em_pasta(diretorio_raiz: Path, string_pesquisa: str, exte
                 elif len(lista_de_arquivos) == 1:
                     logger.info(f'Foi encontrado {magenta(1)} arquivo com a extensão {cyan(extensao)} na pasta {green(diretorio)}.')
                 elif len(lista_de_arquivos) > 1:
-                    logger.info(f'Foram encontrados {magenta(len(lista_de_arquivos))} arquivos com a extensão {cyan(extensao)} na pasta {green(diretorio)}.')
+                    logger.info(f'Foram encontrados {magenta(len(lista_de_arquivos))} arquivos com a extensão {cyan(extensao)} na pasta {green(Path(diretorio).name)}.')
             else:
                 logger.alert(f'O diretório não é válido: {yellow(diretorio)}')
         
