@@ -1,45 +1,113 @@
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-# Inicializa o colorama
-from colorama import init, Fore, Back, Style
+'''
+- A ideia do utils.py é trazer funcionalidades padrões para os projetos simultâneos
+- Para isso, importa as principais bibliotecas utilizadas nos projetos
+- Enquanto o projeto não tomar forma para ganhar um repositório próprio, será mantido em py-sandbox para experimentação
+'''
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+# - Importação de bibliotecas - #
+
+# Permite funcionalidades para interações com o sistema
+import os
+
+# Permite que os comandos sejam executados em segundo plano
+import subprocess
+
+# Permite funcionalidades para interações com o sistema
+import sys
+
+# Fornece funcionalidades para a medição e maniputalação de datas
+from datetime import datetime
+
+# Permite funcionalidades para o interpretador
+import sys
+
+# Possibilita a anotação de tipos indicando que uma variável, argumento ou valor de retorno deve ser uma lista.
+from typing import List, Any
+
+# 
+from pathlib import Path
+
+# Habilita o logging para retorno de mensagens de erro e informações no terminal
+import logging 
+
+# Fornece funcionalidades para a edição de cores e estilos de texto no terminal
+from colorama import init, Fore, Style
+
+# 
+from datetime import datetime
+
+# 
+from functools import wraps
+
+# 
+import inspect
+
+# Habilita o Pandas e fornece a manipulação do arquivo Excel em um DataFrame
+import pandas as pd
+
+# 
+from tabulate import tabulate as tb
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+# Inicializa o Colorama
 init(autoreset=True)
 
-def sublinhado(texto: str = '') -> str:
-    '''Formata o texto para sublinhado no terminal.'''
-    texto: str = str('\033[4m' + str(texto) + Style.RESET_ALL)
-    return texto
+def underline(texto: str = '') -> str:
+    '''Formata o texto para underline no terminal.'''
+    return str('\033[4m' + str(texto) + Style.RESET_ALL)
 
-def negrito(texto: str = '') -> str:
-    '''Formata o texto para negrito no terminal.'''
-    texto: str = str(Style.BRIGHT + str(texto) + Style.RESET_ALL)
-    return texto
+def bold(texto: str = '') -> str:
+    '''Formata o texto para bold no terminal.'''
+    return str(Style.BRIGHT + str(texto) + Style.RESET_ALL)
 
-def italico(texto: str = '') -> str:
-    '''Formata o texto para italico no terminal.'''
-    texto: str = str('\x1B[3m' + str(texto) + Style.RESET_ALL)
-    return texto
+def italic(texto: str = '') -> str:
+    '''Formata o texto para italic no terminal.'''
+    return str('\x1B[3m' + str(texto) + Style.RESET_ALL)
 
-def format_1(texto: str = '') -> str:
+def cyan(texto: str = '') -> str:
     '''Formata o texto cyan no terminal.'''
-    texto: str = str(Fore.CYAN + str(texto) + Style.RESET_ALL)
-    return texto
+    return str(Fore.CYAN + str(texto) + Style.RESET_ALL)
 
-def format_2(texto: str = '') -> str:
+def green(texto: str = '') -> str:
     '''Formata o texto green no terminal.'''
-    texto: str = str(Fore.GREEN + str(texto) + Style.RESET_ALL)
-    return texto
+    return str(Fore.GREEN + str(texto) + Style.RESET_ALL)
 
-def format_3(texto: str = '') -> str:
+def red(texto: str = '') -> str:
     '''Formata o texto red no terminal.'''
-    texto: str = str(Fore.RED + str(texto) + Style.RESET_ALL)
-    return texto
+    return str(Fore.RED + str(texto) + Style.RESET_ALL)
 
-def format_4(texto: str = '') -> str:
+def magenta(texto: str = '') -> str:
     '''Formata o texto magenta no terminal.'''
-    texto: str = str(Fore.MAGENTA + str(texto) + Style.RESET_ALL)
-    return texto
+    return str(Fore.MAGENTA + str(texto) + Style.RESET_ALL)                                    
+ 
+ 
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-    
+# Formata a data e hora como uma string
+def define_data_hora_formatada() -> datetime.strftime:
+    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+# Retorna uma mensagem manual de configuração do logger
+def logger_manual(level_name: str = None) -> str:
+
+    if level_name is None:
+        level_name = 'info'.upper()
+    else:
+        level_name.upper()
+    return print(f'{define_data_hora_formatada()} - {gree('INFO')} - Nível de logger configurado como {format_logging(level_name)}.')
+
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 # Mapeia os níveis de log para cores correspondentes 
 def format_logging(levelname: str):
     colors = {
@@ -51,70 +119,11 @@ def format_logging(levelname: str):
     }
     return f'{colors.get(levelname, "")}{levelname}{Style.RESET_ALL}'
 
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
-
-# Habilita o logging para retorno de mensagens de erro e informações no terminal
-import logging 
-
-# class ColorFormatter(logging.Formatter):
-#     # Mapeia os níveis de log para cores correspondentes
-#     COLORS = {
-#         'DEBUG': Fore.CYAN,
-#         'INFO': Fore.WHITE,
-#         'WARNING': Fore.YELLOW,
-#         'ERROR': Fore.RED,
-#         'CRITICAL': Fore.MAGENTA
-#     }
-
-#     def format(self, record):
-#         color = self.COLORS.get(record.levelname, '')
-#         if color:
-#             record.name = color + record.name
-#             record.levelname = color + record.levelname
-#             record.msg = color + record.msg
-#         return logging.Formatter.format(self, record)
-
-# class ColorLogger(logging.Logger):
-#     def __init__(self, name):
-#         logging.Logger.__init__(self, name, logging.DEBUG)
-#         color_formatter = ColorFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-#         console = logging.StreamHandler()
-#         console.setFormatter(color_formatter)
-#         self.addHandler(console)
-
-# logging.setLoggerClass(ColorLogger)
-# logger = logging.getLogger('utils.py')
-
-# def testa_logger_colorama() -> None:
-#     logger.info('This is an info message')
-#     logger.warning('This is a warning message')
-#     logger.debug('This is a debug message')
-#     logger.error('This is an error message')
-
-
-# # Configura o logger para retorno de mensagens de erro e informações no terminal
-# def configurar_logger(atributo_nome: str = __name__) -> logging.Logger:
-#     try:
-#         logging.basicConfig(
-#             format='%(asctime)s - %(levelname)s - %(message)s',
-#             level=logging.NOTSET,
-#             datefmt='%Y-%m-%d %H:%M:%S'
-#         )
-#         logger: logging.Logger = logging.getLogger(atributo_nome)
-#         logger.setLevel(logging.NOTSET)
-#     except Exception as e:
-#         raise Exception(f'Ocorreu um erro ao confgiurar o logger:\n{e}')
-#     return logger
-
-
 # Configura o logger para retorno de mensagens de erro e informações no terminal
-def configurar_logger(atributo_nome: str = __name__) -> logging.Logger:
+def configurar_logger(atributo_nome: str = __name__, level_name: str = 'info') -> logging.Logger:
     try:
         # Define um formatador personalizado
-        formatter = logging.Formatter(
-            fmt='%(asctime)s - %(levelname_formatted)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S',
-        )
+        formatter = logging.Formatter(fmt='%(asctime)s - %(levelname_formatted)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         
         # Adiciona um filtro para adicionar o levelname formatado
         class LevelnameFormatter(logging.Filter):
@@ -123,10 +132,23 @@ def configurar_logger(atributo_nome: str = __name__) -> logging.Logger:
                 return True
         
         # Cria e configura o logger
-        logger: logging.Logger = logging.getLogger(atributo_nome)
-        logger.setLevel(logging.DEBUG)
+        logger: logging.Logger = logging.getLogger(atributo_nome)     
         
-        
+        # Configura o nível de log
+        match level_name.lower():
+            case 'info':
+                logger.setLevel(logging.INFO)
+            case 'debug':
+                logger.setLevel(logging.DEBUG)
+            case 'warning':
+                logger.setLevel(logging.WARNING)
+            case 'error':
+                logger.setLevel(logging.ERROR)
+            case 'critical': 
+                logger.setLevel(logging.CRITICAL)
+            case _:
+                logger.setLevel(logging.INFO)
+                
         # Adiciona o formatador ao logger
         handler = logging.StreamHandler()
         handler.setFormatter(formatter)
@@ -142,12 +164,6 @@ logger = configurar_logger('utils.py')
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-# Permite funcionalidades para interações com o sistema
-import os
-
-# Permite que os comandos sejam executados em segundo plano
-import subprocess
-
 # Configura a funcionalidade para limpar o terminal
 def limpar_terminal(bool: bool = True) -> None:
     try:
@@ -158,24 +174,16 @@ def limpar_terminal(bool: bool = True) -> None:
         # Executa o comando de limpeza do terminal
         subprocess.run(limpar_comando, shell=True, check=True)
 
-        if bool:
-            logger.info('Terminal limpo com sucesso.')
-            print('----------------------------------------------------------')
-        else:
-            logger.error(f'Insira "True" ou "False" como parâmetro')
+        # Retorna mensagem no terminal
+        logger.info('Terminal limpo.') if bool else None
             
-    except subprocess.CalledProcessError as e:
-        logger.error(f'Erro ao limpar o terminal:\n{e}')
     except Exception as e:
-        logger.exception(f'Erro desconhecido ao limpar o terminal: \n{e}')
+        logger.error(f'Erro ao limpar o terminal:\n{e}')
         
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-# Permite que os comandos sejam executados em segundo plano
-import subprocess
-
  # Permite a tipagem de parâmetros
-from typing import List
+from typing import NewType, Union, List
         
 # Permite que os comandos sejam executados em segundo plano
 def executar_comandos_bash(comandos: List[str]) -> None:  # type: ignore
@@ -184,9 +192,6 @@ def executar_comandos_bash(comandos: List[str]) -> None:  # type: ignore
         subprocess.run(comando, shell=True) # shell=True torna o comando executável
         
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
-
-from tabulate import tabulate as tb
-import pandas as pd
 
 # Formatação do DataFrame com bordas redondas
 def formatar_dataframe(dataframe: pd.DataFrame, flag: bool=False) -> pd.DataFrame:
@@ -232,12 +237,7 @@ def valida_extensao_de_texto(extensao: FileExtension) -> bool:
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-# Permite funcionalidades para interações com o sistema
-import sys
-
-import pathlib as Path
-
-def configurar_arquivo_log(diretorio_do_arquivo: Path = None) -> None:
+def configurar_arquivo_log(diretorio_do_arquivo: Path = None, fg_nome_dinamico: bool = True) -> None:
     
     if diretorio_do_arquivo is None:
         with os.path.dirname(os.getcwd()) as diretorio_raiz:
@@ -248,8 +248,9 @@ def configurar_arquivo_log(diretorio_do_arquivo: Path = None) -> None:
         sys.stderr = diretorio_do_arquivo
         logger.info(f'Arquivo de log definido no diretório: {diretorio_do_arquivo}')
 
+nome_dinamico = 'teste'
 
-diretorio_do_arquivo = os.path.join(os.path.dirname(os.getcwd()),'data','log.txt')
+diretorio_do_arquivo = Path(__file__).parent.parent / 'log' / str('log_' + nome_dinamico + '-' + datetime.now().strftime('%Y%m%d_%H%M%S') + '.txt')
 
 print(diretorio_do_arquivo)
 
@@ -259,15 +260,25 @@ print(diretorio_do_arquivo)
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-# Definição de decorators
-from functools import wraps
+def linha_atual() -> int:
+    '''Retorna o nível da linha atual'''
+    current_frame = inspect.currentframe().f_lineno
+    return current_frame
 
-def erro_execucao(func: Callable) -> Callable:
-    '''Decorator para capturar e registrar erros ao executar uma função.'''
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            logger.error(f'Erro ao executar a função {func.__name__}:\n{e}')
-    return wrapper
+def erro_execucao(parametro_decorador: str):
+    def decorator_erro_execucao(func: Callable) -> Callable:
+        '''Decorator para capturar e registrar erro na execução da função.'''
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                if parametro_decorador == 'debug':
+                    #logger.debug(f'Executando a função {format_1(func.__name__)} na linha {format_4(linha_atual())}')
+                    logger.debug(f'Executando a função {cyan(func.__name__)}')
+                return func(*args, **kwargs)
+            except Exception as e:
+                # Captura e registra o erro
+                logger.error(f'Erro ao executar a função {red(func.__name__)}: {bold(e)}')
+        return wrapper
+    return decorator_erro_execucao
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
