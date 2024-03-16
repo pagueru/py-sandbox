@@ -59,6 +59,11 @@ from tabulate import tabulate as tb
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
+# Limpa o terminal
+os.system('cls' if os.name == 'nt' else 'clear')
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 # Inicializa o Colorama
 init(autoreset=True)
 
@@ -200,7 +205,7 @@ def limpar_terminal(bool: bool = True) -> None:
         
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
- # Permite a tipagem de parâmetros
+# Permite a tipagem de parâmetros
 from typing import NewType, Union, List
         
 # Permite que os comandos sejam executados em segundo plano
@@ -256,25 +261,47 @@ def valida_extensao_de_texto(extensao: FileExtension) -> bool:
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 def configurar_arquivo_log(diretorio_do_arquivo: Path = None, fg_nome_dinamico: bool = True) -> None:
-    
-    if diretorio_do_arquivo is None:
-        with os.path.dirname(os.getcwd()) as diretorio_raiz:
-            diretorio_do_arquivo = os.path.join(diretorio_raiz,'data','log.txt')
-            logger.info(f'Arquivo de log definido no diretório: {diretorio_do_arquivo}')
-    else:
-        sys.stdout = diretorio_do_arquivo
-        sys.stderr = diretorio_do_arquivo
+    '''Configuração do arquivo de log.'''
+    try:
+        # Configuração do logger
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)  # Define o nível de log para INFO
+
+        # Criação do manipulador de arquivo para o log
+        if diretorio_do_arquivo is None:
+            logger.alert('Nenhum diretório de log foi especificado.')
+            diretorio_raiz = Path.home() / 'Desktop' / 'logs'
+            nome_script = Path(__file__).stem
+            nome_arquivo_log = f'log_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt' if fg_nome_dinamico else '_log.txt'
+            diretorio_do_arquivo = diretorio_raiz / f'{nome_script}_py' / nome_arquivo_log
+
+            # Cria o diretório de log se ele não existir
+            if not diretorio_do_arquivo.parent.exists():
+                diretorio_do_arquivo.parent.mkdir(parents=True, exist_ok=True)
+
+        # Criação do manipulador de arquivo para o log
+        log_file_handler = logging.FileHandler(diretorio_do_arquivo)
+        log_file_handler.setLevel(logging.INFO)
+
+        # Formatação do log
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        log_file_handler.setFormatter(formatter)
+
+        # Adiciona o manipulador de arquivo ao logger
+        logger.addHandler(log_file_handler)
+
         logger.info(f'Arquivo de log definido no diretório: {diretorio_do_arquivo}')
 
-nome_dinamico = 'teste'
+    except Exception as e:
+        logger.error(f'Erro ao configurar o arquivo de log: {e}')
 
-diretorio_do_arquivo = Path(__file__).parent.parent / 'log' / str('log_' + nome_dinamico + '-' + datetime.now().strftime('%Y%m%d_%H%M%S') + '.txt')
+def main():
+    print('Olá mundo')
 
-print(diretorio_do_arquivo)
+if __name__ == '__main__':
+    configurar_arquivo_log()
+    main()
 
-# Restaure a saída padrão e a saída de erro padrão
-#sys.stdout.close()
-#sys.stderr.close()
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------#
 

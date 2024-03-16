@@ -36,7 +36,7 @@ logger = configurar_logger(__name__, logger_execucao_funcao)
 logger_manual(logging.getLevelName(logger.level))
 
 # Configura o arquivo de log
-configurar_arquivo_log
+configurar_arquivo_log()
 
 # Obtém o nome do script
 nome_script = Path(__file__).name
